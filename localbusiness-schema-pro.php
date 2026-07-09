@@ -3,7 +3,7 @@
  * Plugin Name:       LocalBusiness Schema Pro
  * Plugin URI:        https://kitmobley.com/plugins/localbusiness-schema-pro/
  * Description:       LocalBusiness JSON-LD schema for service-area operators. Multi-location, trip and service catalog, seasonal availability — where Rank Math and Yoast end, this begins.
- * Version:           1.0.0
+ * Version:           1.0.1
  * Requires at least: 5.8
  * Requires PHP:      7.4
  * Author:            Kit Mobley
@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'LSP_VERSION', '1.0.0' );
+define( 'LSP_VERSION', '1.0.1' );
 define( 'LSP_SLUG', 'localbusiness-schema-pro' );
 define( 'LSP_FILE', __FILE__ );
 define( 'LSP_DIR', plugin_dir_path( __FILE__ ) );
@@ -31,6 +31,12 @@ if ( ! defined( 'LSP_LICENSE_API_BASE' ) ) {
 	define( 'LSP_LICENSE_API_BASE', 'https://kitmobley.com/api' );
 }
 
+// Shared kitmobley/wp-plugin-core library (bundled at build time).
+require_once LSP_DIR . 'includes/vendor/kitmobley-core/src/Config.php';
+require_once LSP_DIR . 'includes/vendor/kitmobley-core/src/License.php';
+require_once LSP_DIR . 'includes/vendor/kitmobley-core/src/Updater.php';
+require_once LSP_DIR . 'includes/vendor/kitmobley-core/src/LicenseUI.php';
+
 require_once LSP_DIR . 'includes/class-location.php';
 require_once LSP_DIR . 'includes/class-service.php';
 require_once LSP_DIR . 'includes/class-schema.php';
@@ -38,6 +44,24 @@ require_once LSP_DIR . 'includes/class-detector.php';
 require_once LSP_DIR . 'includes/class-license.php';
 require_once LSP_DIR . 'includes/class-updater.php';
 require_once LSP_DIR . 'includes/class-admin.php';
+
+function lsp_plugin_config() {
+	static $cfg = null;
+	if ( null === $cfg ) {
+		$cfg = new \KitMobley\PluginCore\Config( array(
+			'slug'          => LSP_SLUG,
+			'version'       => LSP_VERSION,
+			'basename'      => LSP_BASENAME,
+			'text_domain'   => 'localbusiness-schema-pro',
+			'api_base'      => LSP_LICENSE_API_BASE,
+			'option_key'    => 'lsp_license',
+			'transient_key' => 'lsp_update_manifest',
+			'ajax_prefix'   => 'lsp',
+			'pro_url'       => 'https://kitmobley.com/plugins/' . LSP_SLUG . '/#pricing',
+		) );
+	}
+	return $cfg;
+}
 
 register_activation_hook( __FILE__, function () {
 	if ( false === get_option( 'lsp_settings' ) ) {

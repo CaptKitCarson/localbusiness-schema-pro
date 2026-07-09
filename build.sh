@@ -11,6 +11,16 @@ if [[ -z "${VERSION:-}" ]]; then
 	exit 1
 fi
 
+# Sync shared kitmobley/wp-plugin-core library into includes/vendor/.
+CORE_SRC="${WP_PLUGIN_CORE:-$HOME/Projects/wp-plugin-core}"
+CORE_DEST="$ROOT/includes/vendor/kitmobley-core"
+if [[ -d "$CORE_SRC/src" ]]; then
+	mkdir -p "$CORE_DEST/src"
+	rsync -a --delete "$CORE_SRC/src/" "$CORE_DEST/src/"
+	cp "$CORE_SRC/LICENSE.txt" "$CORE_DEST/LICENSE.txt" 2>/dev/null || true
+	echo "Synced wp-plugin-core from $CORE_SRC"
+fi
+
 STAGE="$ROOT/dist/build/$SLUG"
 DIST="$ROOT/dist"
 rm -rf "$STAGE"

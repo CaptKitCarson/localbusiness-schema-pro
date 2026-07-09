@@ -4,7 +4,7 @@ Tags: schema, local seo, structured data, json-ld, localbusiness
 Requires at least: 5.8
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -77,6 +77,9 @@ One Location with full LocalBusiness JSON-LD (address, geo, phone, hours, sameAs
 Leaflet-based polygon service-area drawer (GeoShape polygons in `areaServed`), CSV bulk import for multi-location clients, and per-tenant GBP sync exploration.
 
 == Changelog ==
+
+= 1.0.1 =
+* Internal refactor: license and updater code now sourced from the shared kitmobley/wp-plugin-core library, bundled at build time under includes/vendor/kitmobley-core/. Zero behavior changes — options keys, AJAX action names, and admin UI preserved.
 
 = 1.0.0 =
 * Initial release
