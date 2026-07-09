@@ -1,0 +1,34 @@
+/* LocalBusiness Schema Pro — admin */
+
+.lsp-wrap h1 .lsp-pro-badge {
+	display: inline-block;
+	margin-left: 12px;
+	padding: 3px 10px;
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: 0.1em;
+	background: linear-gradient(90deg, #1D9E75, #5DE0B0);
+	color: #06090f;
+	border-radius: 3px;
+	vertical-align: middle;
+}
+
+.lsp-license-card {
+	max-width: 720px;
+	background: #fff;
+	border: 1px solid #dcdcde;
+	border-radius: 3px;
+	padding: 24px 28px;
+}
+.lsp-license-active { border-left: 4px solid #1D9E75; }
+
+.lsp-license-meta {
+	display: grid;
+	grid-template-columns: 140px 1fr;
+	row-gap: 8px;
+	column-gap: 16px;
+	margin: 12px 0 20px;
+}
+.lsp-license-meta dt { font-weight: 600; color: #50575e; text-transform: uppercase; font-size: 12px; letter-spacing: 0.06em; }
+.lsp-license-meta dd { margin: 0; color: #1d2327; }
+.lsp-license-meta code { background: #f6f7f7; padding: 3px 8px; border-radius: 3px; letter-spacing: 1px; }
