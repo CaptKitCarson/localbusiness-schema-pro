@@ -1,8 +1,8 @@
 <?php
 /**
- * Plugin Name:       LocalBusiness Schema Pro
+ * Plugin Name:       LocalBusiness Schema
  * Plugin URI:        https://kitmobley.com/plugins/localbusiness-schema-pro/
- * Description:       LocalBusiness JSON-LD schema for service-area operators. Multi-location, trip and service catalog, seasonal availability — where Rank Math and Yoast end, this begins.
+ * Description:       LocalBusiness JSON-LD schema for service-area operators. Multi-location, trip and service catalog, seasonal availability. Where Rank Math and Yoast end, this begins.
  * Version:           1.0.1
  * Requires at least: 5.8
  * Requires PHP:      7.4
@@ -10,7 +10,7 @@
  * Author URI:        https://kitmobley.com
  * License:           GPL v2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       localbusiness-schema-pro
+ * Text Domain:       localbusiness-schema
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 define( 'LSP_VERSION', '1.0.1' );
-define( 'LSP_SLUG', 'localbusiness-schema-pro' );
+define( 'LSP_SLUG', 'localbusiness-schema' );
 define( 'LSP_FILE', __FILE__ );
 define( 'LSP_DIR', plugin_dir_path( __FILE__ ) );
 define( 'LSP_URL', plugin_dir_url( __FILE__ ) );
@@ -26,6 +26,14 @@ define( 'LSP_BASENAME', plugin_basename( __FILE__ ) );
 
 define( 'LSP_CPT_LOCATION', 'lsp_location' );
 define( 'LSP_CPT_SERVICE',  'lsp_service' );
+
+// The marketing page slug is deliberately independent of the plugin slug. The
+// plugin is "localbusiness-schema" for WordPress.org; the sales page predates
+// that rename and still lives at /plugins/localbusiness-schema-pro/. Deriving
+// this from LSP_SLUG would 404 every upgrade link.
+if ( ! defined( 'LSP_PRO_URL' ) ) {
+	define( 'LSP_PRO_URL', 'https://kitmobley.com/plugins/localbusiness-schema-pro/#pricing' );
+}
 
 if ( ! defined( 'LSP_LICENSE_API_BASE' ) ) {
 	define( 'LSP_LICENSE_API_BASE', 'https://kitmobley.com/api' );
@@ -52,12 +60,12 @@ function lsp_plugin_config() {
 			'slug'          => LSP_SLUG,
 			'version'       => LSP_VERSION,
 			'basename'      => LSP_BASENAME,
-			'text_domain'   => 'localbusiness-schema-pro',
+			'text_domain'   => 'localbusiness-schema',
 			'api_base'      => LSP_LICENSE_API_BASE,
 			'option_key'    => 'lsp_license',
 			'transient_key' => 'lsp_update_manifest',
 			'ajax_prefix'   => 'lsp',
-			'pro_url'       => 'https://kitmobley.com/plugins/' . LSP_SLUG . '/#pricing',
+			'pro_url'       => LSP_PRO_URL,
 		) );
 	}
 	return $cfg;
@@ -118,7 +126,7 @@ add_action( 'init', function () {
 } );
 
 add_filter( 'plugin_action_links_' . LSP_BASENAME, function ( $links ) {
-	$link = '<a href="' . esc_url( admin_url( 'edit.php?post_type=' . LSP_CPT_LOCATION ) ) . '">' . esc_html__( 'Locations', 'localbusiness-schema-pro' ) . '</a>';
+	$link = '<a href="' . esc_url( admin_url( 'edit.php?post_type=' . LSP_CPT_LOCATION ) ) . '">' . esc_html__( 'Locations', 'localbusiness-schema' ) . '</a>';
 	array_unshift( $links, $link );
 	return $links;
 } );

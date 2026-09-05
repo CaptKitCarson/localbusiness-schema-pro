@@ -30,46 +30,46 @@ class LSP_Service {
 
 	public static function service_types() {
 		return array(
-			'Service'         => __( 'Service (generic)', 'localbusiness-schema-pro' ),
-			'TouristTrip'     => __( 'TouristTrip',       'localbusiness-schema-pro' ),
-			'HomeAndConstructionService' => __( 'Home / Construction Service', 'localbusiness-schema-pro' ),
-			'FinancialProduct'=> __( 'FinancialProduct',  'localbusiness-schema-pro' ),
-			'FoodService'     => __( 'FoodService',       'localbusiness-schema-pro' ),
-			'Course'          => __( 'Course',            'localbusiness-schema-pro' ),
+			'Service'         => __( 'Service (generic)', 'localbusiness-schema' ),
+			'TouristTrip'     => __( 'TouristTrip',       'localbusiness-schema' ),
+			'HomeAndConstructionService' => __( 'Home / Construction Service', 'localbusiness-schema' ),
+			'FinancialProduct'=> __( 'FinancialProduct',  'localbusiness-schema' ),
+			'FoodService'     => __( 'FoodService',       'localbusiness-schema' ),
+			'Course'          => __( 'Course',            'localbusiness-schema' ),
 		);
 	}
 
 	public static function availability_options() {
 		return array(
-			'InStock'          => __( 'InStock (default)', 'localbusiness-schema-pro' ),
-			'LimitedAvailability' => __( 'LimitedAvailability', 'localbusiness-schema-pro' ),
-			'PreOrder'         => __( 'PreOrder', 'localbusiness-schema-pro' ),
-			'SoldOut'          => __( 'SoldOut', 'localbusiness-schema-pro' ),
-			'Discontinued'     => __( 'Discontinued', 'localbusiness-schema-pro' ),
+			'InStock'          => __( 'InStock (default)', 'localbusiness-schema' ),
+			'LimitedAvailability' => __( 'LimitedAvailability', 'localbusiness-schema' ),
+			'PreOrder'         => __( 'PreOrder', 'localbusiness-schema' ),
+			'SoldOut'          => __( 'SoldOut', 'localbusiness-schema' ),
+			'Discontinued'     => __( 'Discontinued', 'localbusiness-schema' ),
 		);
 	}
 
 	public static function price_unit_options() {
 		return array(
-			''            => __( '(none — flat price)', 'localbusiness-schema-pro' ),
-			'PER_HOUR'    => __( 'per hour', 'localbusiness-schema-pro' ),
-			'PER_TRIP'    => __( 'per trip', 'localbusiness-schema-pro' ),
-			'PER_DAY'     => __( 'per day', 'localbusiness-schema-pro' ),
-			'PER_PERSON'  => __( 'per person', 'localbusiness-schema-pro' ),
-			'PER_SESSION' => __( 'per session', 'localbusiness-schema-pro' ),
+			''            => __( '(none — flat price)', 'localbusiness-schema' ),
+			'PER_HOUR'    => __( 'per hour', 'localbusiness-schema' ),
+			'PER_TRIP'    => __( 'per trip', 'localbusiness-schema' ),
+			'PER_DAY'     => __( 'per day', 'localbusiness-schema' ),
+			'PER_PERSON'  => __( 'per person', 'localbusiness-schema' ),
+			'PER_SESSION' => __( 'per session', 'localbusiness-schema' ),
 		);
 	}
 
 	public function register_cpt() {
 		$args = array(
 			'labels' => array(
-				'name'          => __( 'Services / Trips', 'localbusiness-schema-pro' ),
-				'singular_name' => __( 'Service / Trip', 'localbusiness-schema-pro' ),
-				'add_new_item'  => __( 'Add Service / Trip', 'localbusiness-schema-pro' ),
-				'edit_item'     => __( 'Edit Service / Trip', 'localbusiness-schema-pro' ),
-				'menu_name'     => __( 'Services / Trips', 'localbusiness-schema-pro' ),
-				'search_items'  => __( 'Search Services', 'localbusiness-schema-pro' ),
-				'not_found'     => __( 'No services yet.', 'localbusiness-schema-pro' ),
+				'name'          => __( 'Services / Trips', 'localbusiness-schema' ),
+				'singular_name' => __( 'Service / Trip', 'localbusiness-schema' ),
+				'add_new_item'  => __( 'Add Service / Trip', 'localbusiness-schema' ),
+				'edit_item'     => __( 'Edit Service / Trip', 'localbusiness-schema' ),
+				'menu_name'     => __( 'Services / Trips', 'localbusiness-schema' ),
+				'search_items'  => __( 'Search Services', 'localbusiness-schema' ),
+				'not_found'     => __( 'No services yet.', 'localbusiness-schema' ),
 			),
 			'public'              => false,
 			'show_ui'             => true,
@@ -87,7 +87,7 @@ class LSP_Service {
 	public function register_metabox() {
 		add_meta_box(
 			'lsp_service_meta',
-			__( 'Service / Trip details', 'localbusiness-schema-pro' ),
+			__( 'Service / Trip details', 'localbusiness-schema' ),
 			array( $this, 'render_metabox' ),
 			LSP_CPT_SERVICE,
 			'normal',
@@ -99,8 +99,8 @@ class LSP_Service {
 		$license = new LSP_License();
 		if ( ! $license->is_pro() ) {
 			echo '<div class="notice notice-warning inline" style="margin:0;padding:12px 16px;"><p>';
-			echo esc_html__( 'Services / Trips require a Pro license.', 'localbusiness-schema-pro' );
-			echo ' <a href="https://kitmobley.com/plugins/' . esc_attr( LSP_SLUG ) . '/#pricing" target="_blank" rel="noopener">' . esc_html__( 'Get Pro', 'localbusiness-schema-pro' ) . '</a>';
+			echo esc_html__( 'Services / Trips require a Pro license.', 'localbusiness-schema' );
+			echo ' <a href="' . esc_url( LSP_PRO_URL ) . '" target="_blank" rel="noopener">' . esc_html__( 'Get Pro', 'localbusiness-schema' ) . '</a>';
 			echo '</p></div>';
 			return;
 		}

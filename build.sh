@@ -21,7 +21,7 @@ for arg in "$@"; do
 done
 
 ROOT="$(cd "$(dirname "$0")" && pwd)"
-SLUG="localbusiness-schema-pro"
+SLUG="localbusiness-schema"
 VERSION="$(grep -oE "Version:\s+[0-9]+\.[0-9]+\.[0-9]+" "$ROOT/$SLUG.php" | awk '{print $2}')"
 
 if [[ -z "${VERSION:-}" ]]; then

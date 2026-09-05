@@ -35,16 +35,16 @@ class LSP_Admin {
 	public function register_menu() {
 		add_submenu_page(
 			'edit.php?post_type=' . LSP_CPT_LOCATION,
-			__( 'License', 'localbusiness-schema-pro' ),
-			__( 'License', 'localbusiness-schema-pro' ),
+			__( 'License', 'localbusiness-schema' ),
+			__( 'License', 'localbusiness-schema' ),
 			'manage_options',
 			'lsp-license',
 			array( $this, 'render_license_page' )
 		);
 		add_submenu_page(
 			'edit.php?post_type=' . LSP_CPT_LOCATION,
-			__( 'Settings', 'localbusiness-schema-pro' ),
-			__( 'Settings', 'localbusiness-schema-pro' ),
+			__( 'Settings', 'localbusiness-schema' ),
+			__( 'Settings', 'localbusiness-schema' ),
 			'manage_options',
 			'lsp-settings',
 			array( $this, 'render_settings_page' )
@@ -88,7 +88,7 @@ class LSP_Admin {
 
 	public function render_license_page() {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have permission to view this page.', 'localbusiness-schema-pro' ) );
+			wp_die( esc_html__( 'You do not have permission to view this page.', 'localbusiness-schema' ) );
 		}
 		$license = new LSP_License();
 		$state = $license->get_state();
@@ -100,7 +100,7 @@ class LSP_Admin {
 		}
 		?>
 		<div class="wrap lsp-wrap">
-			<h1><?php esc_html_e( 'LocalBusiness Schema Pro — License', 'localbusiness-schema-pro' ); ?>
+			<h1><?php esc_html_e( 'LocalBusiness Schema Pro — License', 'localbusiness-schema' ); ?>
 				<?php if ( $is_pro ) : ?>
 					<span class="lsp-pro-badge">PRO · <?php echo esc_html( ucfirst( (string) $license->tier() ) ); ?></span>
 				<?php endif; ?>
@@ -108,7 +108,7 @@ class LSP_Admin {
 
 			<?php if ( $is_pro ) : ?>
 				<div class="lsp-license-card lsp-license-active">
-					<h2><?php esc_html_e( 'Pro is active', 'localbusiness-schema-pro' ); ?></h2>
+					<h2><?php esc_html_e( 'Pro is active', 'localbusiness-schema' ); ?></h2>
 					<dl class="lsp-license-meta">
 						<dt>License key</dt>
 						<dd><code><?php echo esc_html( $state['key'] ); ?></code></dd>
@@ -122,13 +122,13 @@ class LSP_Admin {
 						<?php endif; ?>
 					</dl>
 					<p>
-						<button type="button" class="button button-secondary" id="lsp-license-remove"><?php esc_html_e( 'Deactivate this site', 'localbusiness-schema-pro' ); ?></button>
+						<button type="button" class="button button-secondary" id="lsp-license-remove"><?php esc_html_e( 'Deactivate this site', 'localbusiness-schema' ); ?></button>
 					</p>
 				</div>
 			<?php else : ?>
 				<div class="lsp-license-card">
-					<h2><?php esc_html_e( 'Activate Pro', 'localbusiness-schema-pro' ); ?></h2>
-					<p><?php esc_html_e( 'Paste your license key from the purchase email. Pro unlocks multi-location, service/trip catalog, and automatic plugin updates.', 'localbusiness-schema-pro' ); ?></p>
+					<h2><?php esc_html_e( 'Activate Pro', 'localbusiness-schema' ); ?></h2>
+					<p><?php esc_html_e( 'Paste your license key from the purchase email. Pro unlocks multi-location, service/trip catalog, and automatic plugin updates.', 'localbusiness-schema' ); ?></p>
 					<?php if ( ! empty( $state['message'] ) && 'inactive' !== $state['status'] ) : ?>
 						<div class="notice notice-error inline"><p><?php echo esc_html( $state['message'] ); ?></p></div>
 					<?php endif; ?>
@@ -137,8 +137,8 @@ class LSP_Admin {
 						<input type="text" id="lsp-license-key" class="regular-text" placeholder="LSP-XXXX-XXXX-XXXX-XXXX" autocomplete="off" />
 					</p>
 					<p>
-						<button type="button" class="button button-primary" id="lsp-license-activate"><?php esc_html_e( 'Activate', 'localbusiness-schema-pro' ); ?></button>
-						<a href="https://kitmobley.com/plugins/<?php echo esc_attr( LSP_SLUG ); ?>/#pricing" target="_blank" rel="noopener" class="button button-secondary"><?php esc_html_e( 'Get a license', 'localbusiness-schema-pro' ); ?> &rarr;</a>
+						<button type="button" class="button button-primary" id="lsp-license-activate"><?php esc_html_e( 'Activate', 'localbusiness-schema' ); ?></button>
+						<a href="<?php echo esc_url( LSP_PRO_URL ); ?>" target="_blank" rel="noopener" class="button button-secondary"><?php esc_html_e( 'Get a license', 'localbusiness-schema' ); ?> &rarr;</a>
 					</p>
 				</div>
 			<?php endif; ?>
@@ -176,7 +176,7 @@ class LSP_Admin {
 
 	public function render_settings_page() {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have permission to view this page.', 'localbusiness-schema-pro' ) );
+			wp_die( esc_html__( 'You do not have permission to view this page.', 'localbusiness-schema' ) );
 		}
 		$s = wp_parse_args( get_option( 'lsp_settings', array() ), array(
 			'primary_location_id' => 0,
@@ -187,43 +187,43 @@ class LSP_Admin {
 		$locations = LSP_Location::all_ids();
 		?>
 		<div class="wrap lsp-wrap">
-			<h1><?php esc_html_e( 'LocalBusiness Schema Pro — Settings', 'localbusiness-schema-pro' ); ?></h1>
+			<h1><?php esc_html_e( 'LocalBusiness Schema Pro — Settings', 'localbusiness-schema' ); ?></h1>
 			<form method="post" action="options.php">
 				<?php settings_fields( 'lsp_settings_group' ); ?>
 				<table class="form-table" role="presentation">
 					<tr>
-						<th scope="row"><label for="lsp_primary_location_id"><?php esc_html_e( 'Primary location', 'localbusiness-schema-pro' ); ?></label></th>
+						<th scope="row"><label for="lsp_primary_location_id"><?php esc_html_e( 'Primary location', 'localbusiness-schema' ); ?></label></th>
 						<td>
 							<select name="lsp_settings[primary_location_id]" id="lsp_primary_location_id">
-								<option value="0">— <?php esc_html_e( 'Select a location', 'localbusiness-schema-pro' ); ?> —</option>
+								<option value="0">— <?php esc_html_e( 'Select a location', 'localbusiness-schema' ); ?> —</option>
 								<?php foreach ( $locations as $lid ) : ?>
 									<option value="<?php echo (int) $lid; ?>" <?php selected( (int) $s['primary_location_id'], (int) $lid ); ?>>
 										<?php echo esc_html( get_the_title( $lid ) ); ?>
 									</option>
 								<?php endforeach; ?>
 							</select>
-							<p class="description"><?php esc_html_e( 'The location whose schema is emitted on the homepage.', 'localbusiness-schema-pro' ); ?></p>
+							<p class="description"><?php esc_html_e( 'The location whose schema is emitted on the homepage.', 'localbusiness-schema' ); ?></p>
 						</td>
 					</tr>
 					<tr>
-						<th scope="row"><?php esc_html_e( 'Auto-inject', 'localbusiness-schema-pro' ); ?></th>
+						<th scope="row"><?php esc_html_e( 'Auto-inject', 'localbusiness-schema' ); ?></th>
 						<td>
-							<label><input type="checkbox" name="lsp_settings[inject_on_home]" value="1" <?php checked( $s['inject_on_home'] ); ?> /> <?php esc_html_e( 'Homepage', 'localbusiness-schema-pro' ); ?></label><br />
-							<label><input type="checkbox" name="lsp_settings[inject_on_singular]" value="1" <?php checked( $s['inject_on_singular'] ); ?> /> <?php esc_html_e( 'Singular posts and pages (with optional per-post location override)', 'localbusiness-schema-pro' ); ?></label>
+							<label><input type="checkbox" name="lsp_settings[inject_on_home]" value="1" <?php checked( $s['inject_on_home'] ); ?> /> <?php esc_html_e( 'Homepage', 'localbusiness-schema' ); ?></label><br />
+							<label><input type="checkbox" name="lsp_settings[inject_on_singular]" value="1" <?php checked( $s['inject_on_singular'] ); ?> /> <?php esc_html_e( 'Singular posts and pages (with optional per-post location override)', 'localbusiness-schema' ); ?></label>
 						</td>
 					</tr>
 					<tr>
-						<th scope="row"><label for="lsp_coexistence_mode"><?php esc_html_e( 'When Yoast / Rank Math / AIOSEO Local is active', 'localbusiness-schema-pro' ); ?></label></th>
+						<th scope="row"><label for="lsp_coexistence_mode"><?php esc_html_e( 'When Yoast / Rank Math / AIOSEO Local is active', 'localbusiness-schema' ); ?></label></th>
 						<td>
 							<select name="lsp_settings[coexistence_mode]" id="lsp_coexistence_mode">
-								<option value="alongside" <?php selected( $s['coexistence_mode'], 'alongside' ); ?>><?php esc_html_e( 'Emit alongside (@id-namespaced, safe)', 'localbusiness-schema-pro' ); ?></option>
-								<option value="defer_if_present" <?php selected( $s['coexistence_mode'], 'defer_if_present' ); ?>><?php esc_html_e( 'Defer — do not emit if incumbent is active', 'localbusiness-schema-pro' ); ?></option>
+								<option value="alongside" <?php selected( $s['coexistence_mode'], 'alongside' ); ?>><?php esc_html_e( 'Emit alongside (@id-namespaced, safe)', 'localbusiness-schema' ); ?></option>
+								<option value="defer_if_present" <?php selected( $s['coexistence_mode'], 'defer_if_present' ); ?>><?php esc_html_e( 'Defer — do not emit if incumbent is active', 'localbusiness-schema' ); ?></option>
 							</select>
-							<p class="description"><?php esc_html_e( 'Alongside is the default and safe: our @id namespace never collides with the other plugin\'s.', 'localbusiness-schema-pro' ); ?></p>
+							<p class="description"><?php esc_html_e( 'Alongside is the default and safe: our @id namespace never collides with the other plugin\'s.', 'localbusiness-schema' ); ?></p>
 						</td>
 					</tr>
 				</table>
-				<?php submit_button( __( 'Save Settings', 'localbusiness-schema-pro' ) ); ?>
+				<?php submit_button( __( 'Save Settings', 'localbusiness-schema' ) ); ?>
 			</form>
 		</div>
 		<?php
@@ -238,8 +238,8 @@ class LSP_Admin {
 		$active = (int) ( ( $total->publish ?? 0 ) + ( $total->draft ?? 0 ) );
 		if ( $active <= self::FREE_LOCATION_CAP ) return;
 		echo '<div class="notice notice-warning"><p>';
-		echo esc_html__( 'Free tier limits Locations to 1. Extra locations save as drafts and are ignored until you upgrade to Pro.', 'localbusiness-schema-pro' );
-		echo ' <a href="https://kitmobley.com/plugins/' . esc_attr( LSP_SLUG ) . '/#pricing" target="_blank" rel="noopener">' . esc_html__( 'Get Pro', 'localbusiness-schema-pro' ) . ' →</a>';
+		echo esc_html__( 'Free tier limits Locations to 1. Extra locations save as drafts and are ignored until you upgrade to Pro.', 'localbusiness-schema' );
+		echo ' <a href="' . esc_url( LSP_PRO_URL ) . '" target="_blank" rel="noopener">' . esc_html__( 'Get Pro', 'localbusiness-schema' ) . ' →</a>';
 		echo '</p></div>';
 	}
 
@@ -270,7 +270,7 @@ class LSP_Admin {
 		foreach ( array( 'post', 'page' ) as $pt ) {
 			add_meta_box(
 				'lsp_location_override',
-				__( 'LocalBusiness Schema', 'localbusiness-schema-pro' ),
+				__( 'LocalBusiness Schema', 'localbusiness-schema' ),
 				array( $this, 'render_override_metabox' ),
 				$pt,
 				'side',
@@ -284,9 +284,9 @@ class LSP_Admin {
 		$current = (int) get_post_meta( $post->ID, '_lsp_location_id', true );
 		$locations = LSP_Location::all_ids();
 		?>
-		<label for="lsp_location_id"><?php esc_html_e( 'Emit location for this post', 'localbusiness-schema-pro' ); ?></label>
+		<label for="lsp_location_id"><?php esc_html_e( 'Emit location for this post', 'localbusiness-schema' ); ?></label>
 		<select name="lsp_location_id" id="lsp_location_id" style="width:100%;margin-top:6px;">
-			<option value="0"><?php esc_html_e( 'Use primary (from settings)', 'localbusiness-schema-pro' ); ?></option>
+			<option value="0"><?php esc_html_e( 'Use primary (from settings)', 'localbusiness-schema' ); ?></option>
 			<?php foreach ( $locations as $lid ) : ?>
 				<option value="<?php echo (int) $lid; ?>" <?php selected( $current, (int) $lid ); ?>>
 					<?php echo esc_html( get_the_title( $lid ) ); ?>

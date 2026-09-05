@@ -1,8 +1,8 @@
-=== LocalBusiness Schema Pro ===
+=== LocalBusiness Schema ===
 Contributors: kitmobley
 Tags: schema, local seo, structured data, json-ld, localbusiness
 Requires at least: 5.8
-Tested up to: 6.7
+Tested up to: 7.1
 Requires PHP: 7.4
 Stable tag: 1.0.1
 License: GPLv2 or later
@@ -70,7 +70,7 @@ Privacy policy: https://kitmobley.com/privacy
 
 == Installation ==
 
-1. Upload the plugin ZIP through **Plugins → Add New → Upload Plugin**, or extract to `/wp-content/plugins/localbusiness-schema-pro/`
+1. Upload the plugin ZIP through **Plugins → Add New → Upload Plugin**, or extract to `/wp-content/plugins/localbusiness-schema/`
 2. Activate through the **Plugins** menu
 3. Go to **Locations → Add New**, fill in the fields, publish
 4. Go to **Locations → Settings** and select your primary Location for the homepage

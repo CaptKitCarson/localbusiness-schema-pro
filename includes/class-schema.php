@@ -254,7 +254,7 @@ class LSP_Schema {
 
 		return array(
 			'@type'           => 'OfferCatalog',
-			'name'            => sprintf( __( 'Services offered by %s', 'localbusiness-schema-pro' ), get_the_title( $location_id ) ),
+			'name'            => sprintf( __( 'Services offered by %s', 'localbusiness-schema' ), get_the_title( $location_id ) ),
 			'itemListElement' => $items,
 		);
 	}
