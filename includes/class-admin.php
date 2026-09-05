@@ -300,7 +300,7 @@ class LSP_Admin {
 	}
 
 	public function save_override_metabox( $post_id, $post ) {
-		if ( ! isset( $_POST['lsp_override_nonce'] ) || ! wp_verify_nonce( $_POST['lsp_override_nonce'], 'lsp_override_nonce' ) ) return;
+		if ( ! isset( $_POST['lsp_override_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['lsp_override_nonce'] ) ), 'lsp_override_nonce' ) ) return;
 		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) return;
 		if ( ! current_user_can( 'edit_post', $post_id ) ) return;
 		if ( ! in_array( $post->post_type, array( 'post', 'page' ), true ) ) return;

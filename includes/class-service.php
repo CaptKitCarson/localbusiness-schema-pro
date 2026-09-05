@@ -186,13 +186,15 @@ class LSP_Service {
 	}
 
 	public static function save_meta( $post_id, $post ) {
-		if ( ! isset( $_POST[ self::NONCE ] ) || ! wp_verify_nonce( $_POST[ self::NONCE ], self::NONCE ) ) {
+		if ( ! isset( $_POST[ self::NONCE ] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST[ self::NONCE ] ) ), self::NONCE ) ) {
 			return;
 		}
 		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) return;
 		if ( ! current_user_can( 'edit_post', $post_id ) ) return;
 		if ( ! ( new LSP_License() )->is_pro() ) return;
 
+		// Unslashed here and fully sanitised field by field in sanitize_meta().
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 		$in = isset( $_POST['lsp_service'] ) && is_array( $_POST['lsp_service'] ) ? wp_unslash( $_POST['lsp_service'] ) : array();
 		update_post_meta( $post_id, self::META_KEY, self::sanitize_meta( $in ) );
 	}

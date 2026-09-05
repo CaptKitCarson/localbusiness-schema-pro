@@ -232,10 +232,10 @@ class LSP_Location {
 						?>
 						<div class="lsp-hours-row">
 							<label class="day"><?php echo esc_html( $day_label ); ?></label>
-							<input type="time" name="lsp[hours][<?php echo $d; ?>][open]"  value="<?php echo esc_attr( $row['open'] ); ?>" />
-							<input type="time" name="lsp[hours][<?php echo $d; ?>][close]" value="<?php echo esc_attr( $row['close'] ); ?>" />
+							<input type="time" name="lsp[hours][<?php echo esc_attr( $d ); ?>][open]"  value="<?php echo esc_attr( $row['open'] ); ?>" />
+							<input type="time" name="lsp[hours][<?php echo esc_attr( $d ); ?>][close]" value="<?php echo esc_attr( $row['close'] ); ?>" />
 							<label style="display:inline-flex;align-items:center;gap:6px;font-weight:400;text-transform:none;letter-spacing:0;">
-								<input type="checkbox" name="lsp[hours][<?php echo $d; ?>][closed]" value="1" <?php checked( ! empty( $row['closed'] ) ); ?> />
+								<input type="checkbox" name="lsp[hours][<?php echo esc_attr( $d ); ?>][closed]" value="1" <?php checked( ! empty( $row['closed'] ) ); ?> />
 								<span>Closed</span>
 							</label>
 						</div>
@@ -249,12 +249,14 @@ class LSP_Location {
 	}
 
 	public static function save_meta( $post_id, $post ) {
-		if ( ! isset( $_POST[ self::NONCE ] ) || ! wp_verify_nonce( $_POST[ self::NONCE ], self::NONCE ) ) {
+		if ( ! isset( $_POST[ self::NONCE ] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST[ self::NONCE ] ) ), self::NONCE ) ) {
 			return;
 		}
 		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) return;
 		if ( ! current_user_can( 'edit_post', $post_id ) ) return;
 
+		// Unslashed here and fully sanitised field by field in sanitize_meta().
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 		$in    = isset( $_POST['lsp'] ) && is_array( $_POST['lsp'] ) ? wp_unslash( $_POST['lsp'] ) : array();
 		$meta  = self::sanitize_meta( $in );
 		update_post_meta( $post_id, self::META_KEY, $meta );
