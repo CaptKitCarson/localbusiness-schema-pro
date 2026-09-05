@@ -125,6 +125,11 @@ add_action( 'init', function () {
 	}
 } );
 
+// The free-tier Location cap is a licensing limit, not an admin-screen nicety,
+// so it registers for every request. LSP_Admin is only instantiated under
+// is_admin(); registering this there meant REST and WP-CLI publishes skipped it.
+add_filter( 'wp_insert_post_data', array( 'LSP_Admin', 'enforce_free_cap' ), 10, 2 );
+
 add_filter( 'plugin_action_links_' . LSP_BASENAME, function ( $links ) {
 	$link = '<a href="' . esc_url( admin_url( 'edit.php?post_type=' . LSP_CPT_LOCATION ) ) . '">' . esc_html__( 'Locations', 'localbusiness-schema' ) . '</a>';
 	array_unshift( $links, $link );

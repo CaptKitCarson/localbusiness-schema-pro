@@ -27,9 +27,6 @@ class LSP_Admin {
 		add_action( 'add_meta_boxes', array( $this, 'register_override_metabox' ) );
 		add_action( 'save_post',      array( $this, 'save_override_metabox' ), 10, 2 );
 
-		// Guard: if free tier and user tries to publish more locations than the
-		// cap, force them back to draft.
-		add_filter( 'wp_insert_post_data', array( $this, 'enforce_free_cap' ), 10, 2 );
 	}
 
 	public function register_menu() {
@@ -246,8 +243,14 @@ class LSP_Admin {
 	/**
 	 * If we're on free tier and this Location would push us over the cap when
 	 * published, force it to draft.
+	 *
+	 * Registered from the main plugin file rather than this constructor, and
+	 * static so it does not need an LSP_Admin instance. LSP_Admin is only
+	 * constructed under is_admin(), so hanging this filter off it meant the cap
+	 * was a wp-admin guard rather than an enforced limit: publishing a Location
+	 * over REST or WP-CLI bypassed it entirely.
 	 */
-	public function enforce_free_cap( $data, $postarr ) {
+	public static function enforce_free_cap( $data, $postarr ) {
 		if ( LSP_CPT_LOCATION !== ( $data['post_type'] ?? '' ) ) return $data;
 		if ( 'publish' !== ( $data['post_status'] ?? '' ) ) return $data;
 		$license = new LSP_License();
