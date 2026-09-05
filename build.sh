@@ -1,6 +1,24 @@
 #!/usr/bin/env bash
 # Build a distributable ZIP of the plugin.
+#
+#   ./build.sh           full build, self-hosted distribution (kitmobley.com)
+#   ./build.sh --free    WordPress.org build
+#
+# The --free build strips the self-hosted updater. Plugins in the WordPress.org
+# directory update through the directory, and shipping an updater that overrides
+# that is an outright rejection, not a judgement call. Everything else stays:
+# the licence system only contacts the API when a user explicitly enters a key
+# (revalidate() returns early with no key stored), so a free install never phones
+# home, and the free tier is a real feature set rather than a trial.
 set -euo pipefail
+
+FREE_BUILD=0
+for arg in "$@"; do
+	case "$arg" in
+		--free) FREE_BUILD=1 ;;
+		*) echo "Unknown option: $arg" >&2; exit 1 ;;
+	esac
+done
 
 ROOT="$(cd "$(dirname "$0")" && pwd)"
 SLUG="localbusiness-schema-pro"
@@ -31,7 +49,40 @@ rsync -a --exclude='dist' --exclude='.git' --exclude='node_modules' \
 	--exclude='tests' --exclude='.editorconfig' \
 	"$ROOT/" "$STAGE/"
 
-ZIP="$DIST/$SLUG-$VERSION.zip"
+if [[ "$FREE_BUILD" == "1" ]]; then
+	echo "Building WordPress.org (free) variant: stripping the self-hosted updater."
+
+	# WordPress.org reads readme.txt; README.md and dotfiles are repo cruft.
+	rm -f "$STAGE/README.md" "$STAGE/.gitignore"
+	rm -f "$STAGE/includes/class-updater.php"
+	rm -f "$STAGE/includes/vendor/kitmobley-core/src/Updater.php"
+
+	MAIN="$STAGE/$SLUG.php"
+	# Drop the requires and the registration call. Anchored to the exact lines so
+	# this fails loudly if the main file is restructured, rather than silently
+	# shipping an updater to the directory.
+	for pattern in \
+		"require_once LSP_DIR . 'includes/vendor/kitmobley-core/src/Updater.php';" \
+		"require_once LSP_DIR . 'includes/class-updater.php';" \
+		"( new LSP_Updater() )->register();"
+	do
+		grep -qF "$pattern" "$MAIN" || { echo "free build: expected line not found: $pattern" >&2; exit 1; }
+		grep -vF "$pattern" "$MAIN" > "$MAIN.tmp" && mv "$MAIN.tmp" "$MAIN"
+	done
+
+	# Unguarded use is what fatals. A class_exists() guard is how the shared admin
+	# code stays valid in both builds, so it is allowed through.
+	if grep -rnE "new LSP_Updater|PluginCore\\Updater" "$STAGE" | grep -v "class_exists" | grep -q .; then
+		echo "free build: unguarded updater references survive in the stage:" >&2
+		grep -rnE "new LSP_Updater|PluginCore\\Updater" "$STAGE" | grep -v "class_exists" >&2
+		exit 1
+	fi
+	php -l "$MAIN" >/dev/null 2>&1 || { command -v php >/dev/null 2>&1 && { echo "free build: main file is not valid PHP after stripping" >&2; exit 1; }; }
+
+	ZIP="$DIST/$SLUG-free-$VERSION.zip"
+else
+	ZIP="$DIST/$SLUG-$VERSION.zip"
+fi
 rm -f "$ZIP"
 if command -v zip >/dev/null 2>&1; then
 	( cd "$DIST/build" && zip -qr "$ZIP" "$SLUG" )
@@ -51,6 +102,10 @@ with zipfile.ZipFile(out, 'w', zipfile.ZIP_DEFLATED) as z:
 "
 fi
 
-cp "$ZIP" "$DIST/$SLUG-latest.zip"
-echo "Built: $ZIP"
+if [[ "$FREE_BUILD" == "1" ]]; then
+	echo "Built (WordPress.org variant): $ZIP"
+else
+	cp "$ZIP" "$DIST/$SLUG-latest.zip"
+	echo "Built: $ZIP"
+fi
 ls -lh "$DIST"/*.zip

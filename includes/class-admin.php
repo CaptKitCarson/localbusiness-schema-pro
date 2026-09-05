@@ -317,7 +317,8 @@ class LSP_Admin {
 		if ( empty( $key ) ) wp_send_json_error( array( 'message' => 'License key required' ), 400 );
 		$state = ( new LSP_License() )->activate( $key );
 		if ( 'active' === $state['status'] ) {
-			( new LSP_Updater() )->bust_cache();
+			// Absent in the WordPress.org build, which ships no self-hosted updater.
+			if ( class_exists( 'LSP_Updater' ) ) ( new LSP_Updater() )->bust_cache();
 			wp_send_json_success( array( 'state' => $state, 'message' => 'License activated.' ) );
 		}
 		wp_send_json_error( array( 'state' => $state, 'message' => ! empty( $state['message'] ) ? $state['message'] : 'Activation failed.' ), 200 );
@@ -329,7 +330,7 @@ class LSP_Admin {
 			wp_send_json_error( array( 'message' => 'Forbidden' ), 403 );
 		}
 		( new LSP_License() )->deactivate();
-		( new LSP_Updater() )->bust_cache();
+		if ( class_exists( 'LSP_Updater' ) ) ( new LSP_Updater() )->bust_cache();
 		wp_send_json_success( array( 'message' => 'Site deactivated.' ) );
 	}
 }
